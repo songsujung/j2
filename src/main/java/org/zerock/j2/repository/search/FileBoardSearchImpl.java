@@ -13,6 +13,7 @@ import org.zerock.j2.entity.FileBoard;
 import org.zerock.j2.entity.QFileBoard;
 import org.zerock.j2.entity.QFileBoardImage;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 
 import lombok.extern.log4j.Log4j2;
@@ -30,14 +31,13 @@ public class FileBoardSearchImpl extends QuerydslRepositorySupport implements Fi
         
         QFileBoard board = QFileBoard.fileBoard;
 
-        // QFileBoardImage boardImage = QFileBoardImage.fileBoardImage; - testListQuerydsl오류 잡기 1
+        QFileBoardImage boardImage = QFileBoardImage.fileBoardImage;
 
         JPQLQuery<FileBoard> query = from(board);
+        query.leftJoin(board.images, boardImage);
 
-        //  query.leftJoin(boardImage); - testListQuerydsl오류 잡기 2
-
-        // query.where(boardImage.ord.eq(0)); - testListQuerydsl오류 잡기 3
-
+        query.where(boardImage.ord.eq(0));
+        
         int pageNum = pageRequestDTO.getPage() - 1 < 0 ? 0 : pageRequestDTO.getPage() - 1;
 
         Pageable pageable = PageRequest.of(
@@ -47,15 +47,17 @@ public class FileBoardSearchImpl extends QuerydslRepositorySupport implements Fi
 
         this.getQuerydsl().applyPagination(pageable, query);
 
-        List<FileBoard> list = query.fetch();
-            
-        // log.info(list); - testListQuerydsl오류 잡기 4
+        JPQLQuery<FileBoardListDTO> listQuery = query.select(
+            Projections.bean(
+            FileBoardListDTO.class, 
+            board.bno , 
+            board.title , 
+            boardImage.uuid , 
+            boardImage.fname
+        ));
 
-        // 추가 - testListQuerydsl오류 잡기 5
-        list.forEach(fb -> {
-            log.info(fb);
-            log.info(fb.getImages());
-        });
+        List<FileBoardListDTO> list = listQuery.fetch();
+        long totalCount = listQuery.fetchCount();
 
         return null;
     }

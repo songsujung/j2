@@ -38,8 +38,8 @@ public class FileBoard {
 
     private String writer;
 
-    @BatchSize(size = 20) // 일괄처리 20개까지는 한 번에 처리
-    @OneToMany(cascade = {CascadeType.PERSIST , CascadeType.REMOVE} , fetch = FetchType.LAZY)
+    @BatchSize(size = 20) // 일괄처리 20개까지는 한 번에 처리(최대 20개의 bno값을 한꺼번에 가져온다.)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "board")
     @Builder.Default
     private List<FileBoardImage> images = new ArrayList<>();
@@ -53,7 +53,12 @@ public class FileBoard {
         images.add(boardImage);
 
         //삭제 -> 이미지를 지우는건 - ArrayList를 비워주는 것
-        
+    }
 
+    // 수정 : 이미지를 삭제하고 새로운 이미지를 새로 넣어야됨
+
+    // 이미지 삭제
+    public void cheanImages(){
+        images.clear();
     }
 }

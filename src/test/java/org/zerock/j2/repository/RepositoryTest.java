@@ -100,13 +100,63 @@ public class RepositoryTest {
 
     }
     
-
+    // 목록 조회 검색 (Querydsl)
     @Test
     @Transactional
     public void testListQuerydsl() {
 
         PageRequestDTO requestDTO = new PageRequestDTO();
 
-        repository.list(requestDTO);
+        System.out.println(repository.list(requestDTO));
     }
+
+    @Test
+    public void testSelectOne(){
+
+        Long bno = 99L;
+
+        FileBoard board = repository.selectOne(bno);
+
+        System.out.println(board);
+        System.out.println(board.getImages());
+
+
+    }
+    
+    // 삭제
+    @Test
+    @Commit
+    @Transactional
+    public void testDelete(){
+
+        Long bno = 90L;
+
+        repository.deleteById(bno);
+    }
+
+    // 수정
+    @Test
+    @Commit
+    @Transactional
+    public void testUpdate(){
+
+        Optional<FileBoard> result = repository.findById(20L);
+
+        FileBoard board = result.orElseThrow();
+
+        board.cheanImages();
+
+        FileBoardImage img1 = FileBoardImage.builder()
+            .uuid(UUID.randomUUID().toString())
+            .fname("zzz.jpg")
+            .build();
+        
+        board.addImage(img1);
+
+        repository.save(board);
+    }
+
+
+
+
 }
