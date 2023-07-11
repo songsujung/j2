@@ -29,12 +29,14 @@ public class FileBoardSearchImpl extends QuerydslRepositorySupport implements Fi
     public PageResponseDTO<FileBoardListDTO> list(PageRequestDTO pageRequestDTO) {
         
         QFileBoard board = QFileBoard.fileBoard;
-        QFileBoardImage boardImage = QFileBoardImage.fileBoardImage;
+
+        // QFileBoardImage boardImage = QFileBoardImage.fileBoardImage; - testListQuerydsl오류 잡기 1
 
         JPQLQuery<FileBoard> query = from(board);
-        query.leftJoin(boardImage);
 
-        query.where(boardImage.ord.eq(0));
+        //  query.leftJoin(boardImage); - testListQuerydsl오류 잡기 2
+
+        // query.where(boardImage.ord.eq(0)); - testListQuerydsl오류 잡기 3
 
         int pageNum = pageRequestDTO.getPage() - 1 < 0 ? 0 : pageRequestDTO.getPage() - 1;
 
@@ -47,7 +49,13 @@ public class FileBoardSearchImpl extends QuerydslRepositorySupport implements Fi
 
         List<FileBoard> list = query.fetch();
             
-        log.info(list);
+        // log.info(list); - testListQuerydsl오류 잡기 4
+
+        // 추가 - testListQuerydsl오류 잡기 5
+        list.forEach(fb -> {
+            log.info(fb);
+            log.info(fb.getImages());
+        });
 
         return null;
     }
