@@ -12,5 +12,9 @@ public class ProductListDTO {
     private int price;
 
     private String fname;
+
+    private Long reviewCnt;
+
+    private double reviewAvg;
     
 }

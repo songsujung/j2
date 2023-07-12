@@ -111,6 +111,20 @@ public class ProductTest {
 
     }
 
+    // 목록조회 + review
+    @Test
+    public void testList2(){
+
+        PageRequestDTO requestDTO = new PageRequestDTO();
+
+        PageResponseDTO<ProductListDTO> result = repo.listWithReview(requestDTO);
+
+        for (ProductListDTO dto : result.getDtoList()){
+            System.out.println(dto);
+        }
+
+    }
+
 
 
 }
