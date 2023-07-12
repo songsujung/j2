@@ -1,12 +1,15 @@
 package org.zerock.j2.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.zerock.j2.entity.Product;
 
+import jakarta.transaction.Transactional;
 import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest
@@ -32,4 +35,62 @@ public class ProductTest {
 
         repo.save(product);
     }
+
+    // 등록 - 방식1 LAZY
+    @Test
+    @Transactional
+    public void testRead1(){
+
+        Optional<Product> result = repo.findById(1L);
+
+        Product product = result.orElseThrow();
+
+        System.out.println(product);
+        System.out.println("---------------------");
+        System.out.println(product.getImages());
+
+    }
+
+    // 등록 - 방식2 (자동으로 배열, join 등 생성)
+    @Test
+    public void testRead2(){
+
+        Product product = repo.selectOne(1L);
+
+        System.out.println(product);
+        System.out.println("---------------------");
+        System.out.println(product.getImages());
+
+    }
+
+    // 삭제
+    @Test
+    public void testDelete(){
+
+        repo.deleteById(1L);
+    }
+
+    // 수정
+    @Test
+    @Transactional
+    @Commit
+    public void testModify(){
+
+        Optional<Product> result = repo.findById(2L);
+
+        Product product = result.orElseThrow();
+
+        product.changePrice(6000);
+
+        product.chearImages();
+
+        product.addImage(UUID.randomUUID() + "_newImage.jpg");
+
+        repo.save(product);
+
+
+    }
+
+
+
 }

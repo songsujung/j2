@@ -52,5 +52,9 @@ public class Product {
     public void chearImages() {
         images.clear();
     }
+
+    public void changePrice(int price){
+        this.price = price;
+    }
     
 }
