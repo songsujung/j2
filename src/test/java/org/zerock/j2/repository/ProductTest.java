@@ -89,7 +89,7 @@ public class ProductTest {
 
         product.changePrice(6000);
 
-        product.chearImages();
+        product.clearImages();
 
         product.addImage(UUID.randomUUID() + "_newImage.jpg");
 

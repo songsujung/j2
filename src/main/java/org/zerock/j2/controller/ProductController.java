@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,7 @@ public class ProductController {
 
     private final FileUploader uploader;
 
+    // 등록
     @PostMapping("")
     public Map<String, Long> register(ProductDTO productDTO){
 
@@ -50,5 +53,52 @@ public class ProductController {
         log.info(pageRequestDTO);
 
         return service.list(pageRequestDTO);
+    }
+
+    // 조회
+    @GetMapping("{pno}")
+    public ProductDTO getOne(@PathVariable("pno") Long pno){
+
+        log.info("PNO..................." + pno);
+
+        return service.readOne(pno);
+    }
+
+    // 삭제
+    @DeleteMapping("{pno}")
+    public Map<String, Long> delete(@PathVariable("pno") Long pno){
+
+        log.info("PRODUCT delete PNO..................." + pno);
+
+        service.remove(pno);
+
+        return Map.of("result", pno);
+    }
+
+    // 수정
+    @PostMapping("modify")
+    public Map<String,Long> modify (ProductDTO productDTO){
+
+        log.info("------------------------------------");
+        log.info("------------------------------------");
+        log.info("------------------------------------");
+        log.info(productDTO);
+
+        if(productDTO.getFiles() != null && productDTO.getFiles().size() > 0){
+
+        List<String> uploadFileNames = uploader.uploadFiles(productDTO.getFiles(), true);
+
+        List<String> oldFileNames = productDTO.getImages();
+
+        uploadFileNames.forEach(fname -> oldFileNames.add(fname));
+
+        }
+
+        log.info("After.........................");
+        log.info(productDTO);
+
+        service.modify(productDTO);
+
+        return Map.of("result" , 111L);
     }
 }

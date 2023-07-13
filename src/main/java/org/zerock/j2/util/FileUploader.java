@@ -30,6 +30,23 @@ public class FileUploader {
     @Value("${org.zerock.upload.path}")
     private String path;
 
+    public void removeFiles(List<String> fileNames) {
+        if(fileNames == null || fileNames.size() == 0){
+            return;
+        }
+
+        for ( String fname : fileNames) {
+
+            File original = new File(path, fname);
+            File thumb = new File(path, "s_" + fname);
+
+            if(thumb.exists()) {
+                thumb.delete();
+            }
+            original.delete();
+        }
+    }
+
     public List<String> uploadFiles(List<MultipartFile> files, boolean makeThumbnail){
 
             // 파일이 존재하지 않을 떄

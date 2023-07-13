@@ -36,6 +36,8 @@ public class Product {
 
     private int price;
 
+    private boolean delFlag;
+
     @ElementCollection(fetch = FetchType.LAZY ) // 연관 관계는 항상 LAZY
     @Builder.Default
     private List<ProductImage> images = new ArrayList<>();
@@ -49,12 +51,18 @@ public class Product {
         images.add(pImage);
     }
 
-    public void chearImages() {
+    public void clearImages() {
         images.clear();
     }
 
     public void changePrice(int price){
         this.price = price;
     }
+
+    public void changePname(String pname) {this.pname = pname;}
+
+    public void changePdesc(String pdesc) {this.pdesc = pdesc;}
+    
+    public void changeDel(boolean delFlag) {this.delFlag =delFlag;}
     
 }
