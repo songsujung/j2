@@ -3,6 +3,7 @@ package org.zerock.j2.repository;
 import java.util.Optional;
 import java.util.UUID;
 
+import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,6 @@ import org.zerock.j2.entity.FileBoard;
 import org.zerock.j2.entity.FileBoardImage;
 
 import jakarta.transaction.Transactional;
-import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest
 @Log4j2

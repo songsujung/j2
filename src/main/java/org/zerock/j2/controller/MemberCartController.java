@@ -1,0 +1,36 @@
+package org.zerock.j2.controller;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.hibernate.annotations.Parameter;
+import org.springframework.web.bind.annotation.*;
+import org.zerock.j2.dto.MemberCartDTO;
+import org.zerock.j2.service.MemberCartService;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@Log4j2
+@CrossOrigin
+@RequestMapping("/api/cart/")
+public class MemberCartController {
+
+    private final MemberCartService cartService;
+
+    @PostMapping("add")
+    public List<MemberCartDTO> add( @RequestBody MemberCartDTO memberCartDTO) {
+
+        log.info("param: " + memberCartDTO);
+
+        return cartService.addCart(memberCartDTO);
+    }
+
+    // 카트 가져오기
+    @GetMapping("{email}")
+    public List<MemberCartDTO> get (@PathVariable("email") String email){
+
+        return cartService.getCart(email);
+    }
+
+}
