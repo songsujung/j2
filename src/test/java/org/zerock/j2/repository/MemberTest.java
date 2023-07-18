@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.zerock.j2.dto.MemberDTO;
 import org.zerock.j2.entity.Member;
 
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class MemberTest {
     public void testInsert(){
 
         Member member = Member.builder()
-                .email("sujung@gmail.com")
+                .email("wow_1@nate.com")
                 .pw("1111")
                 .nickname("sujung")
                 .build();
@@ -40,4 +41,5 @@ public class MemberTest {
 
         log.info(member);
     }
+
 }
