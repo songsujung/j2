@@ -1,5 +1,6 @@
 package org.zerock.j2.controller.interceptor;
 
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.zerock.j2.util.JWTUtil;
+
+import java.util.Map;
 
 @Component
 @Log4j2
@@ -24,7 +27,36 @@ public class JWTInterceptor implements HandlerInterceptor {
         if(request.getMethod().equals("OPTIONS")){
             return true;
         }
-        String accessToken = request.getHeader("Authorization");
+
+        try {
+
+            String headerStr = request.getHeader("Authorization");
+
+            if (headerStr == null || headerStr.length() < 7){
+                throw new JWTUtil.CustomJWTException("NullToken");
+            }
+
+            String accessToken = headerStr.substring(7);
+
+            Map<String, Object> claims = jwtUtil.validateToken(accessToken);
+
+            log.info("result : " + claims);
+
+        }catch (Exception e){
+
+            response.setContentType("application/json");
+
+            // {"키": "값" } - json문자열
+            // String str = "{\"error\": }";
+
+            Gson gson = new Gson();
+
+            String str = gson.toJson(Map.of("error", e.getMessage()));
+
+            response.getOutputStream().write(str.getBytes());
+
+            return false;
+        }
 
         log.info("--------------------------------------");
         log.info(handler);
