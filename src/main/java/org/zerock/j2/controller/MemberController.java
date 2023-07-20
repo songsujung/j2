@@ -55,7 +55,7 @@ public class MemberController {
 
         result.setAccessToken(
                 jwtUtil.generate(
-                        Map.of("email",result.getEmail()), 1 )
+                        Map.of("email",result.getEmail()), 10 )
         );
 
         result.setRefreshToken(
@@ -80,7 +80,7 @@ public class MemberController {
 
         Map<String, Object> claims = jwtUtil.validateToken(refreshToken);
 
-        return Map.of("accessToken", jwtUtil.generate(claims, 1),
+        return Map.of("accessToken", jwtUtil.generate(claims, 10),
                 "refreshToken", jwtUtil.generate(claims, 60*24));
 
     }
