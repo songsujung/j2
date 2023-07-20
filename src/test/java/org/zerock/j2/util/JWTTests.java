@@ -33,6 +33,7 @@ public class JWTTests {
         try {
 
             jwtUtil.validateToken(token);
+
         }catch (Exception e){
             System.out.println(e);
         }
